@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!-- # TRANG: TRANG CHỦ | HTML: khung nội dung | CSS: css/style.css | JavaScript: js/trang-chu.js -->
+<!-- # lang="vi" cho trình duyệt biết nội dung trang dùng tiếng Việt. -->
+<html lang="vi">
+<!-- # Phần thiết lập: bảng mã, tên tab, CSS và JavaScript; không phải nội dung thân trang. -->
+<head>
+  <!-- # UTF-8 giúp tiếng Việt có dấu hiển thị đúng. -->
+  <meta charset="UTF-8">
+  <!-- # Cho trang lấy đúng chiều rộng thiết bị, cần cho giao diện điện thoại. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kansou giúp bạn khám phá anime, đọc và viết review.">
+  <!-- # Tên trang xuất hiện trên tab trình duyệt. -->
+  <title>Trang chủ | Kansou</title>
+  <link rel="icon" href="images/favicon.svg">
+  <!-- # Nạp CSS dùng chung: màu sắc, font, Grid/Flexbox và responsive. -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- # Nạp dữ liệu anime trước; defer đợi HTML đọc xong rồi mới chạy script theo thứ tự. -->
+  <script src="js/data.js" defer></script>
+  <!-- # Nạp các hàm đọc/ghi localStorage, quản lý người dùng và danh sách đã lưu. -->
+  <script src="js/luu-tru.js" defer></script>
+  <!-- # Nạp hàm dùng chung: tìm phần tử, menu, tìm kiếm và tạo thẻ poster. -->
+  <script src="js/chung.js" defer></script>
+  <!-- # Nạp xử lý riêng của Trang chủ; mở js/trang-chu.js để học các hàm và sự kiện. -->
+  <script src="js/trang-chu.js" defer></script>
+</head>
+<!-- # Bắt đầu phần giao diện người xem thấy; class cho phép CSS chọn bố cục phù hợp. -->
+<body class="home-page">
+  <a class="skip-link" href="#noi-dung">Đến nội dung chính</a>
+  <!-- Thanh điều hướng dùng giống nhau ở 8 trang. -->
+  <!-- # Thanh đầu trang chứa logo, điều hướng, tìm kiếm và liên kết tài khoản. -->
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Kansou trang chủ">Ani<span>Kanso</span></a>
+    <!-- # Nhóm liên kết chuyển giữa các trang; href là tên tệp HTML cần mở. -->
+    <nav id="menu" aria-label="Điều hướng chính">
+      <a href="index.html">Trang chủ</a>
+      <a href="danh-muc.html">Danh mục</a>
+      <a href="review.html">Review</a>
+      <a href="da-luu.html">Đã lưu</a>
+    </nav>
+    <div class="header-actions">
+      <button id="nut-tim" class="icon-button" aria-label="Mở tìm kiếm" aria-expanded="false"><img src="images/75ea7.svg" alt=""></button>
+      <a id="link-tai-khoan" class="icon-button" href="dang-nhap.html" aria-label="Tài khoản"><img src="images/64455.svg" alt=""></a>
+      <button id="nut-menu" class="icon-button mobile-menu" aria-label="Mở menu" aria-expanded="false">☰</button>
+    </div>
+    <!-- # Form tìm kiếm: name="q" gửi từ khóa sang danh-muc.html?q=...; hidden ẩn lúc đầu. -->
+    <form id="tim-kiem" class="search-panel" action="danh-muc.html" hidden>
+      <label for="tu-khoa">Tìm anime</label>
+      <div><input id="tu-khoa" name="q" type="search" placeholder="Nhập tên anime, tác giả hoặc nhân vật…" autocomplete="off"><button class="button primary">Tìm</button></div>
+      <!-- # Vùng có id="goi-y-tim" để JavaScript tìm và cập nhật đúng nội dung. -->
+      <div id="goi-y-tim"></div>
+    </form>
+  </header>
+  <!-- # Nội dung chính của trang; id="noi-dung" là đích của liên kết bỏ qua menu. -->
+  <main id="noi-dung">
+    <!-- # Banner lớn của Trang chủ; JavaScript thay nội dung khi bấm hai mũi tên. -->
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <h1 id="hero-title">Chú thuật hồi chiến:<br>Hoài Ngọc/ Ngọc Chiết</h1>
+        <p id="hero-meta">4.8/ 5.0 (281 đánh giá) | 1h 50m • 2025 | Shonen, Hành động, Siêu nhiên</p>
+        <p id="hero-description"></p>
+        <div class="hero-buttons"><a id="hero-link" class="button outline" href="chi-tiet.html?id=jujutsu-kaisen-hidden-inventory">Xem review chi tiết</a><button id="hero-save" class="button primary">+ Lưu vào thư viện</button></div>
+        <div class="hero-arrows"><button id="hero-truoc" aria-label="Giới thiệu trước">‹</button><button id="hero-sau" aria-label="Giới thiệu tiếp theo">›</button></div>
+      </div>
+    </section>
+    <!-- # Hàng Anime nổi bật; CSS tạo chuyển động và JavaScript điều khiển dừng/chạy. -->
+    <section class="featured-section" aria-labelledby="noi-bat-title">
+      <div class="container featured-heading"><h2 id="noi-bat-title">ANIME NỔI BẬT</h2><button id="dung-noi-bat" class="text-button" type="button" aria-pressed="false">Tạm dừng</button></div>
+      <!-- # Khung nhìn cắt phần ảnh nằm ngoài; vùng anime-noi-bat được JavaScript điền poster. -->
+      <div class="featured-viewport"><div id="anime-noi-bat" class="featured-track"></div></div>
+    </section>
+    <div class="container recent-layout">
+      <!-- # Khu vực 4 anime mới thêm; nội dung được tạo trong js/trang-chu.js. -->
+      <section class="recent-main">
+        <h2>MỚI ĐƯỢC THÊM GẦN ĐÂY</h2>
+        <div class="section-subtitle"><p>Khám phá các tựa anime mới được thêm vào thư viện của chúng tôi, được sắp xếp theo thời gian tạo</p><a href="danh-muc.html?nhom=moi">Xem tất cả ↗</a></div>
+        <!-- # Vùng có id="anime-moi" để JavaScript tìm và cập nhật đúng nội dung. -->
+        <div id="anime-moi" class="recent-grid"></div>
+      </section>
+      <!-- Hai khu vực dưới chỉ hiển thị mẫu Figma, KHÔNG có liên kết chi tiết. -->
+      <!-- # Bảng xếp hạng tĩnh theo Figma; thẻ article không phải liên kết nên không mở chi tiết. -->
+      <aside class="ranking" aria-label="Bảng xếp hạng minh họa">
+        <h2>BẢNG XẾP HẠNG</h2>
+        <div class="ranking-tabs"><span class="selected">Ngày</span><span>Tuần</span><span>Tháng</span></div>
+          <article class="ranking-item"><span class="rank-number">1</span><img src="images/ea7cb.png" alt="Poster Suzume no Tojimari" loading="lazy"><div><h3>Suzume no Tojimari</h3><span class="score">★ 4.8</span><p>Phiêu lưu, Kỳ ảo, Chính kịch</p></div></article>
+          <article class="ranking-item"><span class="rank-number">2</span><img src="images/c95a5.png" alt="Poster Solo Leveling" loading="lazy"><div><h3>Solo Leveling</h3><span class="score">★ 4.6</span><p>Hành động, Kỳ ảo, Phiêu lưu</p></div></article>
+          <article class="ranking-item"><span class="rank-number">3</span><img src="images/2e5c0.png" alt="Poster Tougen Anki" loading="lazy"><div><h3>Tougen Anki</h3><span class="score">★ 4.6</span><p>Hành động, Kỳ ảo đen tối, siêu nhiên</p></div></article>
+          <article class="ranking-item"><span class="rank-number">4</span><img src="images/fc28b.png" alt="Poster Terminator Zero" loading="lazy"><div><h3>Terminator Zero</h3><span class="score">★ 4.3</span><p>Sci-fi, Hành động, Kinh dị</p></div></article>
+          <article class="ranking-item"><span class="rank-number">5</span><img src="images/31f3b.png" alt="Poster Chainsaw Man: Reze Arc" loading="lazy"><div><h3>Chainsaw Man: Reze Arc</h3><span class="score">★ 4.3</span><p>Hành động, Hài đen, Bi kịch</p></div></article>
+      </aside>
+    </div>
+    <!-- # Mục Được đánh giá cao dùng HTML tĩnh theo phạm vi bài tập. -->
+    <section class="container rated-section">
+      <h2>ĐƯỢC ĐÁNH GIÁ CAO</h2>
+      <div class="section-subtitle"><p>Được đánh giá cao nhất dựa theo bình chọn của cộng đồng</p><span class="yellow">Xem tất cả ↗</span></div>
+      <div class="poster-row"><article class="poster-card static-card"><img src="images/f85e2.png" alt="Poster Sword Art Online" loading="lazy"><div class="poster-caption"><strong>Sword Art Online</strong><span class="score">★ 5.0</span></div></article><article class="poster-card static-card"><img src="images/ffbf7.png" alt="Poster Gintama" loading="lazy"><div class="poster-caption"><strong>Gintama</strong><span class="score">★ 5.0</span></div></article><article class="poster-card static-card"><img src="images/c9401.png" alt="Poster Paprika" loading="lazy"><div class="poster-caption"><strong>Paprika</strong><span class="score">★ 5.0</span></div></article><article class="poster-card static-card"><img src="images/1cd09.png" alt="Poster Death Note" loading="lazy"><div class="poster-caption"><strong>Death Note</strong><span class="score">★ 5.0</span></div></article><article class="poster-card static-card"><img src="images/00f57.png" alt="Poster Attack On Titan: The Last Attack" loading="lazy"><div class="poster-caption"><strong>Attack On Titan: The Last Attack</strong><span class="score">★ 5.0</span></div></article><article class="poster-card static-card"><img src="images/0e26b.png" alt="Poster Firefly Wedding" loading="lazy"><div class="poster-caption"><strong>Firefly Wedding</strong><span class="score">★ 5.0</span></div></article></div>
+    </section>
+  </main>
+  <!-- # Chân trang gồm giới thiệu, liên hệ và các nút mở hộp thông tin. -->
+  <footer class="site-footer">
+    <div class="footer-columns">
+      <div><a class="brand" href="index.html">Ani<span>Kanso</span></a><p>Nền tảng đánh giá Anime miễn phí, hình ảnh chất lượng cao.<br>Tự do đăng bài, kết nối và chia sẻ góc nhìn của bạn.</p></div>
+      <div><strong>Về chúng tôi</strong><p>Liên hệ quảng cáo: anikon.ads@gmail.com<br>Địa chỉ: 207 Giải Phóng, Đồng Tâm, Hai Bà Trưng, Hà Nội</p></div>
+      <div><strong>Thông tin chung</strong><p><button class="text-button" onclick="moThongTin('gioi-thieu')">Giới thiệu</button><br><button class="text-button" onclick="moThongTin('bao-mat')">Chính sách bảo mật</button><br><button class="text-button" onclick="moThongTin('dieu-khoan')">Điều khoản người dùng</button></p></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 AniKanso. All rights reserved.</span><span>Powered by AniKanso333</span></div>
+  </footer>
+  <!-- # Vùng thông báo nổi; JavaScript đổi chữ và bỏ hidden khi cần thông báo. -->
+  <div id="thong-bao" role="status" class="toast" hidden></div>
+  <!-- # Hộp thoại được mở bằng showModal() và đóng bằng close(); id phân biệt từng hộp. -->
+  <dialog id="hop-thong-tin"><button class="dialog-close" onclick="document.getElementById('hop-thong-tin').close()" aria-label="Đóng">×</button><h2 id="tieu-de-hop"></h2><p id="noi-dung-hop"></p></dialog>
+</body>
+</html>

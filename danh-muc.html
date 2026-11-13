@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<!-- # TRANG: DANH MỤC | HTML: khung nội dung | CSS: css/style.css | JavaScript: js/danh-muc.js -->
+<!-- # lang="vi" cho trình duyệt biết nội dung trang dùng tiếng Việt. -->
+<html lang="vi">
+<!-- # Phần thiết lập: bảng mã, tên tab, CSS và JavaScript; không phải nội dung thân trang. -->
+<head>
+  <!-- # UTF-8 giúp tiếng Việt có dấu hiển thị đúng. -->
+  <meta charset="UTF-8">
+  <!-- # Cho trang lấy đúng chiều rộng thiết bị, cần cho giao diện điện thoại. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kansou giúp bạn khám phá anime, đọc và viết review.">
+  <!-- # Tên trang xuất hiện trên tab trình duyệt. -->
+  <title>Danh mục | Kansou</title>
+  <link rel="icon" href="images/favicon.svg">
+  <!-- # Nạp CSS dùng chung: màu sắc, font, Grid/Flexbox và responsive. -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- # Nạp dữ liệu anime trước; defer đợi HTML đọc xong rồi mới chạy script theo thứ tự. -->
+  <script src="js/data.js" defer></script>
+  <!-- # Nạp các hàm đọc/ghi localStorage, quản lý người dùng và danh sách đã lưu. -->
+  <script src="js/luu-tru.js" defer></script>
+  <!-- # Nạp hàm dùng chung: tìm phần tử, menu, tìm kiếm và tạo thẻ poster. -->
+  <script src="js/chung.js" defer></script>
+  <!-- # Nạp xử lý riêng của Danh mục; mở js/danh-muc.js để học các hàm và sự kiện. -->
+  <script src="js/danh-muc.js" defer></script>
+</head>
+<!-- # Bắt đầu phần giao diện người xem thấy; class cho phép CSS chọn bố cục phù hợp. -->
+<body class="catalog-page">
+  <a class="skip-link" href="#noi-dung">Đến nội dung chính</a>
+  <!-- Thanh điều hướng dùng giống nhau ở 8 trang. -->
+  <!-- # Thanh đầu trang chứa logo, điều hướng, tìm kiếm và liên kết tài khoản. -->
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Kansou trang chủ">Ani<span>Kanso</span></a>
+    <!-- # Nhóm liên kết chuyển giữa các trang; href là tên tệp HTML cần mở. -->
+    <nav id="menu" aria-label="Điều hướng chính">
+      <a href="index.html">Trang chủ</a>
+      <a href="danh-muc.html">Danh mục</a>
+      <a href="review.html">Review</a>
+      <a href="da-luu.html">Đã lưu</a>
+    </nav>
+    <div class="header-actions">
+      <button id="nut-tim" class="icon-button" aria-label="Mở tìm kiếm" aria-expanded="false"><img src="images/75ea7.svg" alt=""></button>
+      <a id="link-tai-khoan" class="icon-button" href="dang-nhap.html" aria-label="Tài khoản"><img src="images/64455.svg" alt=""></a>
+      <button id="nut-menu" class="icon-button mobile-menu" aria-label="Mở menu" aria-expanded="false">☰</button>
+    </div>
+    <!-- # Form tìm kiếm: name="q" gửi từ khóa sang danh-muc.html?q=...; hidden ẩn lúc đầu. -->
+    <form id="tim-kiem" class="search-panel" action="danh-muc.html" hidden>
+      <label for="tu-khoa">Tìm anime</label>
+      <div><input id="tu-khoa" name="q" type="search" placeholder="Nhập tên anime, tác giả hoặc nhân vật…" autocomplete="off"><button class="button primary">Tìm</button></div>
+      <!-- # Vùng có id="goi-y-tim" để JavaScript tìm và cập nhật đúng nội dung. -->
+      <div id="goi-y-tim"></div>
+    </form>
+  </header>
+  <!-- # Nội dung chính của trang; id="noi-dung" là đích của liên kết bỏ qua menu. -->
+  <main id="noi-dung">
+    <section class="catalog-hero">
+      <h1>Danh mục Thể loại &amp; Thẻ Anime</h1>
+      <p class="catalog-description">Nơi tổng hợp và phân loại hàng ngàn bộ anime theo thể loại, mùa phát sóng và điểm số đánh giá.<br>Đọc review chân thực từ cộng đồng để tìm ra tác phẩm chất lượng và đáng xem nhất dành riêng cho bạn.</p>
+      <!-- # Bộ lọc danh mục; các select cung cấp điều kiện cho hàm hienKetQua. -->
+      <form id="bo-loc" class="filter-box">
+        <h2>BỘ LỌC NÂNG CAO</h2>
+        <div class="filter-fields">
+          <select id="loc-the-loai" aria-label="Thể loại"><option value="">Thể loại</option></select>
+          <select id="loc-nam" aria-label="Năm phát hành"><option value="">Năm phát hành</option></select>
+          <select id="loc-mua" aria-label="Mùa"><option value="">Mùa</option><option>Xuân</option><option>Hè</option><option>Thu</option><option>Đông</option></select>
+          <select id="loc-loai" aria-label="Loại phim"><option value="">Loại phim</option><option>TV</option><option>Movie</option></select>
+          <select id="loc-nuoc" aria-label="Quốc gia"><option value="">Quốc gia</option><option>Nhật Bản</option></select>
+          <select id="loc-studio" aria-label="Studio"><option value="">Studio</option></select>
+          <button class="button primary" type="submit">Lọc Anime</button>
+        </div>
+      </form>
+      <!-- # Các con số trình bày theo Figma, là dữ liệu mẫu trong thiết kế. -->
+      <div class="catalog-stats"><div><strong>18.467</strong><span>LƯỢT REVIEW</span></div><div><strong>SHONEN</strong><span>THỂ LOẠI ĐƯỢC ƯA CHUỘNG NHẤT</span></div><div><strong>10.421</strong><span>BỘ ANIME</span></div></div>
+    </section>
+    <section id="vung-ket-qua" class="container catalog-results" hidden>
+      <div class="results-heading"><h2 id="tieu-de-ket-qua">KẾT QUẢ LỌC</h2><div><label for="sap-xep">Sắp xếp </label><select id="sap-xep"><option value="moi">Mới nhất</option><option value="az">Tên A → Z</option><option value="za">Tên Z → A</option><option value="diem">Điểm cao nhất</option></select></div></div>
+      <p id="mo-ta-ket-qua" class="muted"></p>
+      <!-- # Vùng có id="ket-qua" để JavaScript tìm và cập nhật đúng nội dung. -->
+      <div id="ket-qua" class="poster-grid"></div>
+      <button id="xoa-bo-loc" class="button outline">Xóa bộ lọc</button>
+    </section>
+  </main>
+  <!-- # Chân trang gồm giới thiệu, liên hệ và các nút mở hộp thông tin. -->
+  <footer class="site-footer">
+    <div class="footer-columns">
+      <div><a class="brand" href="index.html">Ani<span>Kanso</span></a><p>Nền tảng đánh giá Anime miễn phí, hình ảnh chất lượng cao.<br>Tự do đăng bài, kết nối và chia sẻ góc nhìn của bạn.</p></div>
+      <div><strong>Về chúng tôi</strong><p>Liên hệ quảng cáo: anikon.ads@gmail.com<br>Địa chỉ: 207 Giải Phóng, Đồng Tâm, Hai Bà Trưng, Hà Nội</p></div>
+      <div><strong>Thông tin chung</strong><p><button class="text-button" onclick="moThongTin('gioi-thieu')">Giới thiệu</button><br><button class="text-button" onclick="moThongTin('bao-mat')">Chính sách bảo mật</button><br><button class="text-button" onclick="moThongTin('dieu-khoan')">Điều khoản người dùng</button></p></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 AniKanso. All rights reserved.</span><span>Powered by AniKanso333</span></div>
+  </footer>
+  <!-- # Vùng thông báo nổi; JavaScript đổi chữ và bỏ hidden khi cần thông báo. -->
+  <div id="thong-bao" role="status" class="toast" hidden></div>
+  <!-- # Hộp thoại được mở bằng showModal() và đóng bằng close(); id phân biệt từng hộp. -->
+  <dialog id="hop-thong-tin"><button class="dialog-close" onclick="document.getElementById('hop-thong-tin').close()" aria-label="Đóng">×</button><h2 id="tieu-de-hop"></h2><p id="noi-dung-hop"></p></dialog>
+</body>
+</html>

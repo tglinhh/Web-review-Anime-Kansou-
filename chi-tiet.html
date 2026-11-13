@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!-- # TRANG: CHI TIẾT ANIME | HTML: khung nội dung | CSS: css/style.css | JavaScript: js/chi-tiet.js -->
+<!-- # lang="vi" cho trình duyệt biết nội dung trang dùng tiếng Việt. -->
+<html lang="vi">
+<!-- # Phần thiết lập: bảng mã, tên tab, CSS và JavaScript; không phải nội dung thân trang. -->
+<head>
+  <!-- # UTF-8 giúp tiếng Việt có dấu hiển thị đúng. -->
+  <meta charset="UTF-8">
+  <!-- # Cho trang lấy đúng chiều rộng thiết bị, cần cho giao diện điện thoại. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kansou giúp bạn khám phá anime, đọc và viết review.">
+  <!-- # Tên trang xuất hiện trên tab trình duyệt. -->
+  <title>Chi tiết anime | Kansou</title>
+  <link rel="icon" href="images/favicon.svg">
+  <!-- # Nạp CSS dùng chung: màu sắc, font, Grid/Flexbox và responsive. -->
+  <link rel="stylesheet" href="css/style.css">
+  <!-- # Nạp dữ liệu anime trước; defer đợi HTML đọc xong rồi mới chạy script theo thứ tự. -->
+  <script src="js/data.js" defer></script>
+  <!-- # Nạp các hàm đọc/ghi localStorage, quản lý người dùng và danh sách đã lưu. -->
+  <script src="js/luu-tru.js" defer></script>
+  <!-- # Nạp hàm dùng chung: tìm phần tử, menu, tìm kiếm và tạo thẻ poster. -->
+  <script src="js/chung.js" defer></script>
+  <!-- # Nạp xử lý riêng của Chi tiết anime; mở js/chi-tiet.js để học các hàm và sự kiện. -->
+  <script src="js/chi-tiet.js" defer></script>
+</head>
+<!-- # Bắt đầu phần giao diện người xem thấy; class cho phép CSS chọn bố cục phù hợp. -->
+<body class="">
+  <a class="skip-link" href="#noi-dung">Đến nội dung chính</a>
+  <!-- Thanh điều hướng dùng giống nhau ở 8 trang. -->
+  <!-- # Thanh đầu trang chứa logo, điều hướng, tìm kiếm và liên kết tài khoản. -->
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Kansou trang chủ">Ani<span>Kanso</span></a>
+    <!-- # Nhóm liên kết chuyển giữa các trang; href là tên tệp HTML cần mở. -->
+    <nav id="menu" aria-label="Điều hướng chính">
+      <a href="index.html">Trang chủ</a>
+      <a href="danh-muc.html">Danh mục</a>
+      <a href="review.html">Review</a>
+      <a href="da-luu.html">Đã lưu</a>
+    </nav>
+    <div class="header-actions">
+      <button id="nut-tim" class="icon-button" aria-label="Mở tìm kiếm" aria-expanded="false"><img src="images/75ea7.svg" alt=""></button>
+      <a id="link-tai-khoan" class="icon-button" href="dang-nhap.html" aria-label="Tài khoản"><img src="images/64455.svg" alt=""></a>
+      <button id="nut-menu" class="icon-button mobile-menu" aria-label="Mở menu" aria-expanded="false">☰</button>
+    </div>
+    <!-- # Form tìm kiếm: name="q" gửi từ khóa sang danh-muc.html?q=...; hidden ẩn lúc đầu. -->
+    <form id="tim-kiem" class="search-panel" action="danh-muc.html" hidden>
+      <label for="tu-khoa">Tìm anime</label>
+      <div><input id="tu-khoa" name="q" type="search" placeholder="Nhập tên anime, tác giả hoặc nhân vật…" autocomplete="off"><button class="button primary">Tìm</button></div>
+      <!-- # Vùng có id="goi-y-tim" để JavaScript tìm và cập nhật đúng nội dung. -->
+      <div id="goi-y-tim"></div>
+    </form>
+  </header>
+  <!-- # Nội dung chính của trang; id="noi-dung" là đích của liên kết bỏ qua menu. -->
+  <main id="noi-dung" class="detail-page">
+    <!-- # Vùng có id="nen-chi-tiet" để JavaScript tìm và cập nhật đúng nội dung. -->
+    <div id="nen-chi-tiet" class="detail-background"></div>
+    <div class="detail-container">
+      <article id="thong-tin-anime" class="detail-card">
+        <div class="detail-top">
+          <img id="poster-chi-tiet" class="detail-poster" src="images/1f3bf.png" alt="Poster anime">
+          <div class="detail-info">
+            <h1 id="ten-anime">SAKAMOTO DAYS</h1><p id="ten-khac"></p>
+            <div class="detail-stats"><span id="diem-anime" class="score"></span><span id="so-luu"></span><span id="luot-xem"></span></div>
+            <h2>Giới thiệu</h2><dl id="gioi-thieu-anime"></dl>
+            <div class="detail-bottom"><div id="nhan-the-loai" class="tags"></div><button id="luu-anime" class="save-button">♡ Nhấn để lưu</button></div>
+          </div>
+        </div>
+        <section class="story"><h2>Cốt truyện chính</h2><p id="cot-truyen"></p></section>
+        <details class="more-information"><summary>Thông tin mở rộng và nguồn tham khảo</summary><div id="thong-tin-mo-rong"></div></details>
+        <a id="viet-review-anime" class="text-button yellow" href="review.html">Viết review cho bộ anime này ↗</a>
+      </article>
+      <section class="comments-card">
+        <h2 id="tieu-de-binh-luan">Bình luận</h2><div id="danh-sach-binh-luan"></div>
+        <form id="form-binh-luan" class="comment-form">
+          <label class="sr-only" for="binh-luan">Nội dung bình luận</label>
+          <textarea id="binh-luan" maxlength="1000" placeholder="Chia sẻ cảm nhận của bạn…" required></textarea>
+          <p id="yeu-cau-dang-nhap"></p><span class="counter"><span id="dem-ky-tu">0</span>/ 1000</span>
+          <button type="submit">Gửi ➤</button><p id="loi-binh-luan" class="form-error" role="alert"></p>
+        </form>
+        <!-- # Vùng có id="review-cong-dong" để JavaScript tìm và cập nhật đúng nội dung. -->
+        <div id="review-cong-dong"></div>
+      </section>
+      <section class="related-section"><h2>GỢI Ý NHỮNG BỘ TƯƠNG TỰ</h2><p class="muted">Khám phá thêm những bộ anime có trong thư viện</p><div id="anime-lien-quan" class="poster-row"></div></section>
+    </div>
+  </main>
+  <!-- # Chân trang gồm giới thiệu, liên hệ và các nút mở hộp thông tin. -->
+  <footer class="site-footer">
+    <div class="footer-columns">
+      <div><a class="brand" href="index.html">Ani<span>Kanso</span></a><p>Nền tảng đánh giá Anime miễn phí, hình ảnh chất lượng cao.<br>Tự do đăng bài, kết nối và chia sẻ góc nhìn của bạn.</p></div>
+      <div><strong>Về chúng tôi</strong><p>Liên hệ quảng cáo: anikon.ads@gmail.com<br>Địa chỉ: 207 Giải Phóng, Đồng Tâm, Hai Bà Trưng, Hà Nội</p></div>
+      <div><strong>Thông tin chung</strong><p><button class="text-button" onclick="moThongTin('gioi-thieu')">Giới thiệu</button><br><button class="text-button" onclick="moThongTin('bao-mat')">Chính sách bảo mật</button><br><button class="text-button" onclick="moThongTin('dieu-khoan')">Điều khoản người dùng</button></p></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 AniKanso. All rights reserved.</span><span>Powered by AniKanso333</span></div>
+  </footer>
+  <!-- # Vùng thông báo nổi; JavaScript đổi chữ và bỏ hidden khi cần thông báo. -->
+  <div id="thong-bao" role="status" class="toast" hidden></div>
+  <!-- # Hộp thoại được mở bằng showModal() và đóng bằng close(); id phân biệt từng hộp. -->
+  <dialog id="hop-thong-tin"><button class="dialog-close" onclick="document.getElementById('hop-thong-tin').close()" aria-label="Đóng">×</button><h2 id="tieu-de-hop"></h2><p id="noi-dung-hop"></p></dialog>
+</body>
+</html>
