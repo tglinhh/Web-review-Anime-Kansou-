@@ -1,0 +1,665 @@
+/* # BẢN HỌC MÃ: CSS chỉ lo cách trình bày; HTML chứa nội dung, JavaScript xử lý tương tác. */
+/* # .ten-lop chọn class; #ten-id chọn id. Dấu # trong bộ chọn id hoặc mã màu không phải chú thích. */
+/* # Mỗi quy tắc có dạng: bộ-chọn { thuộc-tính: giá-trị; }. Lời giải thích nằm trong chú thích để trình duyệt bỏ qua. */
+/* # width/height: rộng/cao; margin: lề ngoài; padding: đệm trong; gap: khoảng cách các phần tử. */
+/* # color/background: màu chữ/nền; font-size: cỡ chữ; border/radius: viền/bo góc. */
+/* # display:flex/grid: xếp bố cục; position: cách định vị; @media: thay bố cục theo thiết bị. */
+
+/* KANSOU — CSS thuần, không sử dụng Bootstrap hoặc Tailwind.
+   Tìm tên phần (ví dụ: TRANG CHỦ) để sửa đúng khu vực. */
+
+/* # 1. FONT, MÀU VÀ ĐỊNH DẠNG CHUNG: tìm số phần này theo hướng dẫn phân công. */
+/* 1. FONT, MÀU VÀ ĐỊNH DẠNG CHUNG */
+/* # Nạp font Inter từ thư mục images để chữ vẫn hiển thị đúng khi không có mạng. */
+@font-face { font-family: Inter; src: url('../images/inter-400.ttf'); font-weight: 400; font-display: swap; }
+/* # Nạp font Inter từ thư mục images để chữ vẫn hiển thị đúng khi không có mạng. */
+@font-face { font-family: Inter; src: url('../images/inter-500.ttf'); font-weight: 500; font-display: swap; }
+/* # Nạp font Inter từ thư mục images để chữ vẫn hiển thị đúng khi không có mạng. */
+@font-face { font-family: Inter; src: url('../images/inter-600.ttf'); font-weight: 600; font-display: swap; }
+/* # Nạp font Inter từ thư mục images để chữ vẫn hiển thị đúng khi không có mạng. */
+@font-face { font-family: Inter; src: url('../images/inter-700.ttf'); font-weight: 700; font-display: swap; }
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scrollbar-color: #666 #151515; }
+body { margin: 0; background: #000; color: #fcfcfc; font: 14px/1.5 Inter, Arial, sans-serif; }
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+a:hover { color: #ffc700; }
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; color: inherit; }
+button:disabled { cursor: wait; opacity: .6; }
+input, select, textarea { min-width: 0; accent-color: #ffc700; caret-color: #ffc700; }
+input::placeholder, textarea::placeholder { color: #c3c3c3; opacity: 1; }
+textarea { resize: vertical; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { line-height: 1.2; }
+h1, h2 { text-wrap: balance; }
+h1 { font-size: 50px; }
+h2 { font-size: 50px; }
+h3 { font-size: 20px; }
+p { overflow-wrap: break-word; }
+/* # Phần tử có thuộc tính hidden sẽ ẩn; JavaScript bỏ hidden để hiện lại. */
+[hidden] { display: none !important; }
+::selection { color: #000; background: #ffc700; }
+/* # Viền vàng giúp thấy vị trí đang chọn khi điều khiển bằng bàn phím. */
+:focus-visible { outline: 2px solid #ffc700; outline-offset: 4px; }
+/* # Khung căn giữa, giới hạn chiều rộng và chừa lề hai bên trang. */
+.container { width: calc(100% - 148px); max-width: 1440px; margin: auto; }
+.muted { color: #aaa; }
+.yellow, .score { color: #ffcc00; }
+.score { white-space: nowrap; }
+.sr-only, .skip-link:not(:focus) { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip-link:focus { position: fixed; top: 10px; left: 10px; z-index: 50; background: #ffc700; color: #000; padding: 12px; }
+/* # Kiểu nút dùng chung: căn giữa chữ, khoảng đệm, viền và bo góc. */
+.button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 11px 18px; border: 1px solid #aaa; border-radius: 8px; background: none; color: #fff; text-align: center; cursor: pointer; }
+/* # Nút hành động chính dùng màu vàng theo thiết kế. */
+.primary { background: #ffc700; border-color: #ffc700; color: #111; }
+/* # Nút hành động chính dùng màu vàng theo thiết kế. */
+.primary:hover { background: #ffda4d; border-color: #ffda4d; color: #111; }
+.outline:hover { background: #292929; color: #fff; }
+.dark { background: #0b1520; border-color: #263b52; }
+.text-button { padding: 0; border: 0; background: none; color: inherit; }
+.text-button:hover { color: #ffc700; text-decoration: underline; }
+.form-error { color: #ffb4ab; margin: 9px 0; }
+/* # Khung hướng dẫn khi danh sách chưa có dữ liệu hoặc không tìm thấy kết quả. */
+.empty-state { grid-column: 1 / -1; text-align: center; padding: 60px 20px; border: 1px dashed #555; border-radius: 12px; }
+/* # Khung hướng dẫn khi danh sách chưa có dữ liệu hoặc không tìm thấy kết quả. */
+.empty-state h2 { font-size: 26px; margin-bottom: 12px; }
+/* # Khung hướng dẫn khi danh sách chưa có dữ liệu hoặc không tìm thấy kết quả. */
+.empty-state p { margin: 12px 0 24px; color: #bbb; }
+
+/* # 2. THANH ĐIỀU HƯỚNG VÀ CHÂN TRANG: tìm số phần này theo hướng dẫn phân công. */
+/* 2. THANH ĐIỀU HƯỚNG VÀ CHÂN TRANG */
+/* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+.site-header { position: absolute; top: 26px; left: 0; z-index: 10; width: 100%; height: 85px; display: flex; align-items: center; gap: 0; padding: 0 50px 0 48px; }
+.brand { font: 700 30px Georgia, serif; white-space: nowrap; }
+.brand span { color: #ffcc00; }
+/* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+.site-header nav { display: flex; gap: 41px; margin-left: auto; }
+/* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+.site-header nav a { font-size: 17px; font-weight: 500; white-space: nowrap; }
+/* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+.site-header nav a.active { color: #ffcc00; }
+.header-actions { display: flex; align-items: center; gap: 26px; margin-left: 99px; }
+.icon-button { display: inline-flex; justify-content: center; align-items: center; border: 0; background: none; padding: 0; min-width: 36px; min-height: 44px; }
+.icon-button img { width: 22px; }
+#link-tai-khoan img { width: 36px; }
+.mobile-menu { display: none; }
+.search-panel { position: absolute; right: 50px; top: 80px; width: 430px; padding: 20px; border: 1px solid #555; border-radius: 10px; background: #171717; box-shadow: 0 15px 30px #0009; }
+.search-panel label { display: block; margin-bottom: 8px; font-weight: 600; }
+.search-panel > div:first-of-type { display: flex; gap: 8px; }
+.search-panel input { width: 100%; padding: 10px; background: #292929; border: 1px solid #888; border-radius: 6px; color: #fff; }
+#goi-y-tim a { display: flex; gap: 12px; align-items: center; padding: 9px 0; border-bottom: 1px solid #333; }
+#goi-y-tim img { width: 36px; height: 48px; object-fit: cover; border-radius: 4px; }
+/* # Nền, khoảng đệm và chữ của chân trang dùng chung. */
+.site-footer { background: #151515; padding: 20px max(6.1%, 24px) 14px; color: #aaa; font-size: 12px; }
+.footer-columns { display: grid; grid-template-columns: 1.2fr 1fr .4fr; gap: 60px; }
+/* # Nền, khoảng đệm và chữ của chân trang dùng chung. */
+.site-footer .brand { display: inline-block; font-size: 29px; font-weight: 400; color: #fff; margin-bottom: 10px; }
+.footer-columns strong { display: block; margin-top: 10px; }
+.footer-columns p { line-height: 1.5; }
+.footer-bottom { display: flex; justify-content: space-between; gap: 20px; border-top: 1px solid #555; padding-top: 20px; margin-top: 26px; }
+
+/* # 3. TRANG CHỦ: tìm số phần này theo hướng dẫn phân công. */
+/* 3. TRANG CHỦ */
+/* # Đặt kích thước và ảnh nền của banner đầu Trang chủ. */
+.hero { height: 610px; position: relative; isolation: isolate; background: #000 url('../images/1537e.png') no-repeat 6.1vw -10px / 127.1% auto; }
+/* # Lớp gradient phủ banner giúp chữ nổi rõ trên ảnh; không chặn thao tác chuột. */
+.hero::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #000 0%, transparent 26%), linear-gradient(270deg, transparent 0%, #80808080 53.365%, #000 72.596%), linear-gradient(0deg, #000 0%, transparent 48%); pointer-events: none; }
+.hero-content { position: relative; padding: 136px 0 0 100px; width: 700px; }
+.hero h1 { font-size: 50px; line-height: 1.22; margin-bottom: 20px; letter-spacing: -.025em; }
+#hero-meta { font-size: 14px; margin-bottom: 25px; }
+#hero-description { width: 514px; min-height: 75px; font-size: 14px; line-height: 1.3; }
+.hero-buttons { display: flex; gap: 22px; margin-top: 23px; }
+.hero-buttons .button { height: 53px; min-width: 158px; padding: 12px; }
+.hero-arrows { display: flex; gap: 8px; margin-top: 34px; }
+.hero-arrows button { width: 28px; height: 28px; padding: 0; border: 1px solid #fff; border-radius: 3px; background: transparent; font-size: 23px; line-height: 20px; }
+.hero-arrows button:hover { color: #ffc700; border-color: #ffc700; }
+.featured-section h2 { padding-top: 6px; }
+.featured-heading { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+.featured-heading h2 { flex: 1; }
+#dung-noi-bat { color: #ffcc00; font-size: 13px; white-space: nowrap; padding: 10px 0; }
+.featured-viewport { overflow-x: auto; scrollbar-width: none; margin-top: 23px; }
+/* # Hàng ảnh chạy liên tục: animation 45s là 45 giây mỗi vòng; tăng số này để chạy chậm hơn. */
+.featured-track { --vi-tri-dau: -99px; display: flex; width: max-content; transform: translateX(var(--vi-tri-dau)); animation: truot-anime 45s linear infinite; }
+/* Đổi 45s ở dòng trên thành 60s để chạy chậm hơn, 30s để nhanh hơn. */
+/* # Các mốc chuyển động: từ vị trí đầu đến nửa chiều dài hàng poster để tạo vòng lặp. */
+@keyframes truot-anime {
+  from { transform: translateX(var(--vi-tri-dau)); }
+  to { transform: translateX(calc(var(--vi-tri-dau) - 50%)); }
+}
+/* # Rê chuột, dùng bàn phím, bấm Tạm dừng hoặc ra ngoài màn hình thì dừng chuyển động. */
+.featured-track:hover, .featured-track:focus-within, .featured-track.tam-dung, .featured-track.ngoai-man-hinh { animation-play-state: paused; }
+.poster-card { display: block; position: relative; overflow: hidden; border-radius: 10px; background: #141414; min-width: 0; }
+/* # Ảnh lấp đầy thẻ; object-fit: cover giữ tỷ lệ và cắt phần dư. */
+.poster-card > img { width: 100%; height: 100%; object-fit: cover; }
+a.poster-card img { transition: transform .25s ease; }
+a.poster-card:hover img { transform: scale(1.035); }
+/* # Đặt tên và điểm sát đáy poster; gradient đen làm chữ dễ đọc. */
+.poster-caption { position: absolute; left: 0; right: 0; bottom: 0; min-height: 75px; padding: 35px 10px 12px; background: linear-gradient(transparent, #000 80%); display: flex; align-items: flex-end; justify-content: space-between; gap: 5px; font-size: 12px; }
+/* # Kích thước một poster trong hàng chuyển động; margin-right tạo khoảng cách giữa hai poster. */
+.featured-track .poster-card { flex-shrink: 0; width: 243px; height: 287px; margin-right: 34px; }
+.featured-track .poster-caption { font-size: 17px; }
+.featured-track .anh-can-tren img { object-position: top; }
+/* # Chia Trang chủ thành cột anime mới và cột bảng xếp hạng bằng CSS Grid. */
+.recent-layout { display: grid; grid-template-columns: minmax(0, 1fr) 265px; gap: 86px; margin-top: 55px; }
+.recent-main h2 { white-space: nowrap; }
+.section-subtitle { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; border-bottom: 1px solid #999; padding: 14px 0 17px; margin-bottom: 26px; }
+.section-subtitle p { color: #aaa; font-size: 15px; line-height: 18px; }
+.section-subtitle a, .section-subtitle > span { color: #ffcc00; white-space: nowrap; font-size: 15px; }
+/* # Xếp các anime mới thành lưới; repeat(2, ...) nghĩa là hai cột bằng nhau. */
+.recent-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 35px 40px; }
+.recent-card { display: flex; gap: 26px; min-height: 237px; padding: 15px 18px; border: 2px solid #f5f1f169; border-radius: 20px; }
+.recent-card > img { width: 154px; height: 206px; object-fit: cover; flex-shrink: 0; border-radius: 10px; }
+.recent-card > div { min-width: 0; flex: 1; }
+.recent-card h3 { display: flex; justify-content: space-between; gap: 6px; font-size: 16px; margin-bottom: 7px; }
+.recent-card h3 .score { font-weight: 400; }
+.recent-card .genres { font-size: 10px; color: #bbb; font-style: italic; margin-bottom: 10px; }
+.recent-card .description { font-size: 12px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 10; -webkit-box-orient: vertical; overflow: hidden; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking { border: 2px solid #f5f1f169; border-radius: 20px; padding: 14px 18px; margin-top: 7px; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking h2 { font-size: 20px; margin-bottom: 16px; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-tabs { display: flex; justify-content: space-between; background: #1b1b1b; border: 1px solid #aaa; padding: 4px; border-radius: 10px; margin-bottom: 20px; font-size: 14px; font-weight: 600; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-tabs span { padding: 8px 12px; border-radius: 6px; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-tabs .selected { background: #ffcc00; color: #111; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item:last-child { margin-bottom: 0; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item img { width: 66px; height: 83px; object-fit: cover; border-radius: 8px; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item > div { min-width: 0; }
+.rank-number { width: 21px; height: 22px; border-radius: 50%; background: #ffcc00; color: #000; text-align: center; font-size: 12px; flex-shrink: 0; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item:nth-of-type(n+2) .rank-number { background: #6f6f6f; color: #fff; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item h3 { font-size: 14px; margin-bottom: 4px; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item .score, .ranking-item p { font-size: 10px; }
+/* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+.ranking-item p { color: #aaa; font-style: italic; }
+.rated-section { margin-top: 56px; margin-bottom: 98px; }
+.rated-section .section-subtitle { margin-bottom: 35px; }
+.home-page .footer-bottom { margin-top: 16px; padding-top: 12px; font-size: 11px; }
+.poster-row { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 30px; }
+.poster-row .poster-card { height: 266px; }
+/* # Poster của mục tĩnh dùng con trỏ bình thường vì không mở trang chi tiết. */
+.static-card { cursor: default; }
+
+/* # 4. DANH MỤC VÀ KẾT QUẢ TÌM KIẾM: tìm số phần này theo hướng dẫn phân công. */
+/* 4. DANH MỤC VÀ KẾT QUẢ TÌM KIẾM */
+.catalog-hero { min-height: 845px; padding: 133px 0 120px; background: linear-gradient(0deg, #000 5%, #0000 68%), linear-gradient(#0007, #0007), url('../images/842cb.png') center top / cover; }
+.catalog-hero h1 { font-size: 60px; text-align: center; }
+.catalog-description { text-align: center; font-size: 23px; font-style: italic; width: min(1143px, 90%); margin: 57px auto 35px; line-height: 1.25; }
+.filter-box { width: min(1143px, 90%); margin: auto; padding: 21px 17px 30px; border: 2px solid #d7d7d7; border-radius: 8px; background: #111b2866; }
+.filter-box h2 { color: #ffcc00; font-size: 32px; text-align: center; margin-bottom: 20px; }
+/* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+.filter-fields { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)) 98px; gap: 13px; align-items: center; }
+/* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+.filter-fields select { padding: 5px 7px; background: #62626296; color: #fff; border: 1px solid #fff; border-radius: 5px; font-size: 13px; height: 33px; }
+select option { background: #262626; color: #fff; }
+/* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+.filter-fields .button { font-size: 13px; min-height: 33px; padding: 5px; border-radius: 3px; font-weight: 600; }
+.catalog-stats { width: min(1195px, 87.5%); display: grid; grid-template-columns: repeat(3, 1fr); gap: 44px; margin: 87px auto 0; }
+.catalog-stats div { border: 1px solid #ccc; border-radius: 14px; padding: 24px 10px; text-align: center; }
+.catalog-stats strong { display: block; color: #ffcc00; font-size: 48px; line-height: 1.2; margin-bottom: 14px; }
+.catalog-stats span { font-size: 16px; }
+.catalog-results { padding: 35px 0 80px; }
+.results-heading { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-bottom: 12px; }
+.results-heading h2 { font-size: 32px; }
+.results-heading select, .saved-toolbar select, .saved-toolbar input { background: #333; color: #fff; border: 1px solid #888; border-radius: 5px; padding: 9px; }
+/* # Lưới poster của danh mục và danh sách đã lưu; số cột thay đổi trong media query. */
+.poster-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 30px; margin-top: 30px; }
+/* # Lưới poster của danh mục và danh sách đã lưu; số cột thay đổi trong media query. */
+.poster-grid .poster-card { height: 280px; }
+#xoa-bo-loc { margin-top: 30px; }
+
+/* # 5. CHI TIẾT ANIME: tìm số phần này theo hướng dẫn phân công. */
+/* 5. CHI TIẾT ANIME */
+.detail-page { padding-top: 153px; position: relative; isolation: isolate; }
+.detail-background { position: absolute; inset: 0 0 auto; z-index: -1; height: 850px; background: linear-gradient(0deg, #000 0%, #0008 90%), url('../images/937e6.png') center top / cover; }
+.detail-container { width: min(1204px, calc(100% - 80px)); margin: auto; }
+.detail-card, .comments-card { background: #1f1f1fcc; border-radius: 20px; padding: 42px 47px; }
+/* # Chia vùng đầu trang chi tiết thành cột ảnh poster và cột thông tin. */
+.detail-top { display: grid; grid-template-columns: 355px minmax(0, 1fr); gap: 63px; }
+.detail-poster { width: 355px; height: 527px; object-fit: cover; border-radius: 10px; }
+.detail-info { padding-top: 12px; }
+.detail-info h1 { font-size: 50px; text-transform: uppercase; margin-bottom: 6px; }
+#ten-khac { font-size: 23px; min-height: 33px; }
+.detail-stats { display: flex; gap: 34px; border-top: 1px solid #ddd; margin-top: 16px; padding-top: 12px; font-size: 18px; }
+.detail-info h2, .story h2, .comments-card h2 { font-size: 24px; text-decoration: underline; text-underline-offset: 4px; margin: 16px 0 17px; }
+.detail-info dl { margin: 0; font-size: 18px; line-height: 1.75; }
+.detail-info dt, .detail-info dd { display: inline; margin: 0; }
+.detail-info dd::after { content: ''; display: block; }
+.detail-bottom { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; margin-top: 28px; }
+.tags { display: flex; flex-wrap: wrap; gap: 12px; }
+.tags span { font-size: 16px; border: 1px solid; border-radius: 20px; color: #7dafff; padding: 4px 12px; }
+.tags span:nth-child(4n+2) { color: #d8b433; }
+.tags span:nth-child(4n+3) { color: #8ac383; }
+.tags span:nth-child(4n+4) { color: #e79292; }
+.save-button { border: 0; background: transparent; padding: 8px 0; font-size: 16px; }
+.save-button.saved { color: #ffcc00; }
+.story { margin-top: 32px; }
+.story p { font-size: 19px; line-height: 1.55; }
+.more-information { margin: 24px 0 16px; border-top: 1px solid #555; padding-top: 16px; }
+.more-information summary { cursor: pointer; color: #ffcc00; }
+.more-information h3 { font-size: 18px; margin: 20px 0 8px; }
+.more-information p, .more-information li { line-height: 1.65; margin-bottom: 8px; }
+.source-links a { display: inline-block; color: #ffcc00; margin: 4px 20px 4px 0; text-decoration: underline; }
+.comments-card { margin-top: 33px; padding-top: 12px; }
+.comment { margin: 12px 0; font-size: 18px; }
+.comment strong { color: #ffcc00; }
+.comment-meta { font-size: 12px; color: #aaa; }
+.reply { margin-left: 24px; }
+.comment-form { position: relative; margin-top: 32px; }
+.comment-form textarea { display: block; width: 100%; height: 113px; min-height: 113px; background: #444; border: 1px solid #777; border-radius: 14px; color: #fff; padding: 25px 22px 35px; }
+.comment-form > button { position: absolute; right: 16px; bottom: 15px; border: 0; background: none; color: #ffcc00; font-size: 18px; }
+.comment-form .counter { position: absolute; top: 5px; right: 12px; color: #aaa; }
+#yeu-cau-dang-nhap { position: absolute; left: 23px; top: 42px; font-size: 18px; }
+#yeu-cau-dang-nhap a { color: #ffcc00; }
+#loi-binh-luan:empty { margin: 0; }
+.review-item { padding: 20px 0; border-bottom: 1px solid #666; }
+.review-item p { margin-top: 9px; font-size: 15px; }
+.review-item .review-meta { display: flex; justify-content: space-between; gap: 10px; color: #ccc; font-size: 12px; }
+.related-section { padding: 72px 0 76px; }
+.related-section h2 { font-size: 45px; margin-bottom: 18px; }
+.related-section .poster-row { grid-template-columns: repeat(5, 1fr); border-top: 1px solid #aaa; margin-top: 25px; padding-top: 38px; }
+
+/* # 6. ĐĂNG NHẬP VÀ ĐĂNG KÝ: tìm số phần này theo hướng dẫn phân công. */
+/* 6. ĐĂNG NHẬP VÀ ĐĂNG KÝ */
+.auth-body { background: #111825; }
+/* # Ảnh nền và vị trí khung đăng nhập/đăng ký. */
+.auth-page { min-height: 1024px; display: flex; justify-content: flex-end; align-items: flex-start; padding: 148px 33px 128px; background: linear-gradient(90deg, #0a0e1a8c, #0a0e1ae6), linear-gradient(0deg, #0a0e1acc, transparent), url('../images/19769.png') center / cover; }
+/* # Khung biểu mẫu đăng nhập/đăng ký: chiều rộng, khoảng đệm, viền và nền. */
+.auth-card { width: 615px; min-height: 748px; padding: 51px 55px 39px; border: 1px solid #ffc700; border-radius: 12px; background: #ffffff59; }
+/* # Khung biểu mẫu đăng nhập/đăng ký: chiều rộng, khoảng đệm, viền và nền. */
+.auth-card h1 { font-size: 34px; margin-bottom: 37px; }
+.auth-field { margin-bottom: 31px; }
+.auth-field > label { display: block; margin-bottom: 8px; font-size: 16px; }
+/* # Xếp biểu tượng và ô nhập trên cùng hàng bằng Flexbox. */
+.input-with-icon { display: flex; align-items: center; gap: 14px; min-height: 60px; padding: 0 16px; border: 1px solid transparent; background: #31303094; border-radius: 8px; }
+/* # Xếp biểu tượng và ô nhập trên cùng hàng bằng Flexbox. */
+.input-with-icon > img { width: 20px; height: 23px; object-fit: contain; }
+/* # Xếp biểu tượng và ô nhập trên cùng hàng bằng Flexbox. */
+.input-with-icon input { flex: 1; width: 100%; border: 0; outline: none; background: transparent; color: #fff; font-size: 17px; padding: 16px 0; }
+/* # Xếp biểu tượng và ô nhập trên cùng hàng bằng Flexbox. */
+.input-with-icon:focus-within { border-color: #ffc700; }
+/* # Xếp biểu tượng và ô nhập trên cùng hàng bằng Flexbox. */
+.input-with-icon .icon-button { min-width: 24px; }
+/* # Xếp biểu tượng và ô nhập trên cùng hàng bằng Flexbox. */
+.input-with-icon button img { width: 20px; }
+.auth-options { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; margin: -3px 0 30px; align-items: center; }
+.auth-options label { display: flex; align-items: center; gap: 6px; }
+.auth-options input { margin: 0; }
+.auth-options button { color: #ffcc00; }
+/* # Khung biểu mẫu đăng nhập/đăng ký: chiều rộng, khoảng đệm, viền và nền. */
+.auth-card .button { width: 100%; border-radius: 30px; min-height: 57px; font-size: 18px; font-weight: 600; }
+/* # Khung biểu mẫu đăng nhập/đăng ký: chiều rộng, khoảng đệm, viền và nền. */
+.auth-card .primary { background: #ffc61a; color: #111; }
+.auth-divider { display: flex; align-items: center; gap: 16px; margin: 28px 0; font-size: 14px; }
+.auth-divider::before, .auth-divider::after { content: ''; height: 1px; background: #ffc700; flex: 1; }
+.google-button { gap: 13px; border-color: #ffc700; color: #fff; background: transparent; font-size: 16px !important; font-weight: 400 !important; }
+.google-button img { width: 22px; height: 22px; }
+.auth-switch { text-align: center; margin-top: 42px; font-size: 14px; }
+.auth-switch a { color: #ffcc00; }
+.signup { min-height: 805px; padding-top: 33px; }
+.signup h1 { margin-bottom: 23px; }
+.signup .auth-field { margin-bottom: 19px; }
+.signup .input-with-icon { min-height: 52px; }
+.signup .input-with-icon input { padding: 12px 0; }
+.signup .auth-divider { margin: 19px 0; }
+.signup .auth-switch { margin-top: 24px; }
+.recovery-code { background: #292929; padding: 16px; overflow-wrap: anywhere; margin: 20px 0; font-family: monospace; }
+
+/* # 7. VIẾT REVIEW: tìm số phần này theo hướng dẫn phân công. */
+/* 7. VIẾT REVIEW */
+.review-page { background: #060b13; }
+.review-page .site-header { background: #05070a; }
+.write-page { padding: 126px 44px 76px; }
+/* # Chia trang review thành cột tải poster và cột biểu mẫu. */
+.write-layout { display: grid; grid-template-columns: 310px minmax(0, 1fr); gap: 22px; }
+.upload-panel, .review-form { background: #ffffff59; border: 1px solid #263b52; border-radius: 12px; padding: 18px; min-height: 850px; }
+.poster-preview { display: flex; justify-content: center; align-items: center; height: 411px; background: #31303094; border-radius: 8px; overflow: hidden; }
+.poster-preview img { width: 100%; height: 100%; object-fit: cover; }
+.poster-preview .upload-placeholder { width: 80px; height: 80px; object-fit: contain; }
+.upload-panel .button { width: 100%; margin-top: 15px; font-size: 13px; font-weight: 600; }
+.review-form { padding: 16px 23px 23px; display: flex; flex-direction: column; }
+.review-fields { display: grid; grid-template-columns: 2.14fr 1fr 1.12fr; gap: 13px 14px; }
+.field { display: flex; flex-direction: column; gap: 7px; }
+.field.full { grid-column: 1 / -1; }
+.field label, .rating-field legend { font-size: 12px; font-weight: 600; color: #ebf2fc; }
+.field label span, .rating-field legend span { color: #ffcc00; }
+.field input, .field textarea { width: 100%; border: 1px solid transparent; background: #31303094; border-radius: 7px; padding: 10px 12px; color: #fff; font-size: 12px; min-height: 38px; }
+.field textarea { min-height: 62px; }
+.rating-field { border: 0; padding: 0; margin: 31px 0; }
+/* # Định dạng các nút sao; lớp chosen thể hiện số sao đã chọn. */
+.star-picker { display: flex; gap: 4px; align-items: center; margin-top: 8px; }
+/* # Định dạng các nút sao; lớp chosen thể hiện số sao đã chọn. */
+.star-picker button { padding: 0; border: 0; background: none; font-size: 29px; color: #ffc13d; line-height: 1; }
+/* # Định dạng các nút sao; lớp chosen thể hiện số sao đã chọn. */
+.star-picker button.chosen { color: #ffdc70; }
+/* # Định dạng các nút sao; lớp chosen thể hiện số sao đã chọn. */
+.star-picker button[aria-pressed="true"] { text-shadow: 0 1px 2px #000; }
+/* # Định dạng các nút sao; lớp chosen thể hiện số sao đã chọn. */
+.star-picker output { margin-left: 12px; color: #dce0e5; font-size: 12px; }
+#review-body { min-height: 248px; }
+.review-buttons { display: flex; justify-content: flex-end; gap: 12px; margin-top: auto; padding-top: 46px; }
+.review-buttons .button { min-height: 38px; min-width: 140px; font-size: 12px; }
+.review-buttons .primary { min-width: 220px; }
+#nhac-dang-nhap { font-size: 12px; }
+#nhac-dang-nhap a { color: #ffcc00; }
+
+/* # 8. ĐÃ LƯU VÀ TÀI KHOẢN: tìm số phần này theo hướng dẫn phân công. */
+/* 8. ĐÃ LƯU VÀ TÀI KHOẢN */
+.library-page { background: linear-gradient(#0005, #000 47%), url('../images/96f70.png') center -120px / 133.333% auto no-repeat; }
+.saved-page { padding-top: 126px; min-height: 1372px; }
+.saved-page h1 { text-align: center; font-size: 48px; }
+.saved-toolbar { display: flex; justify-content: flex-end; gap: 16px; margin-top: 43px; }
+.saved-toolbar input { max-width: 240px; }
+.saved-grid { gap: 45px 30px; margin-top: 55px; }
+.saved-grid .poster-card { height: 265px; }
+.saved-item { position: relative; min-width: 0; }
+.remove-save { position: absolute; right: 8px; top: 8px; border: 0; border-radius: 50%; background: #000b; width: 36px; height: 36px; font-size: 25px; color: #ffcc00; }
+.account-page { padding: 235px 48px 80px; min-height: 1372px; background: linear-gradient(0deg, #060709 70%, #06070900 98%), url('../images/96f70.png') center -110px / 133.333% auto no-repeat; }
+/* # Chia trang tài khoản thành cột hồ sơ và cột lịch sử review. */
+.account-layout { display: grid; grid-template-columns: 350px minmax(0, 1fr); gap: 65px; }
+.avatar { width: 126px; height: 126px; object-fit: cover; border: 3px solid #fff; border-radius: 50%; margin-bottom: 20px; }
+.profile-sidebar h1 { font-size: 22px; margin-bottom: 4px; overflow-wrap: anywhere; }
+.profile-sidebar > p { color: #aaa; font-size: 13px; margin-bottom: 20px; }
+.profile-sidebar > .button { min-height: 36px; padding: 6px 16px; font-size: 12px; }
+#dang-xuat { margin-left: 12px; font-size: 12px; color: #aaa; }
+.history-section { margin-top: 58px; }
+.small-heading { display: flex; justify-content: space-between; gap: 16px; align-items: center; margin-bottom: 18px; }
+.small-heading h2 { font-size: 20px; }
+.small-heading > a, .small-heading > button { font-size: 12px; }
+.history-card { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #666; }
+.history-card img { width: 75px; height: 100px; object-fit: cover; border-radius: 6px; }
+.history-card strong { font-size: 13px; }
+.history-card p { font-size: 11px; color: #aaa; margin-top: 8px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.profile-reviews { background: #ffffff30; border: 1px solid #555; border-radius: 10px; padding: 18px; margin-top: 138px; }
+.profile-review { display: flex; gap: 16px; border-bottom: 1px solid #666; padding: 18px 0; }
+.profile-review img { width: 110px; height: 148px; object-fit: cover; border-radius: 6px; }
+.profile-review > div { flex: 1; min-width: 0; }
+.profile-review h3 { font-size: 17px; margin-bottom: 8px; }
+.profile-review p { margin-top: 8px; font-size: 13px; }
+.profile-review small { color: #ccc; }
+.profile-review .text-button { color: #ffcc00; font-size: 12px; margin-top: 10px; }
+
+/* # 9. THÔNG BÁO VÀ HỘP THOẠI: tìm số phần này theo hướng dẫn phân công. */
+/* 9. THÔNG BÁO VÀ HỘP THOẠI */
+/* # Thông báo nổi do hàm thongBao điều khiển; biến thể error thể hiện lỗi. */
+.toast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); z-index: 40; background: #263021; border: 1px solid #839c60; border-radius: 8px; padding: 14px 22px; max-width: calc(100% - 36px); width: max-content; box-shadow: 0 6px 20px #0008; }
+/* # Thông báo nổi do hàm thongBao điều khiển; biến thể error thể hiện lỗi. */
+.toast.error { background: #441f22; border-color: #bf7777; }
+dialog { width: min(480px, calc(100% - 36px)); padding: 30px; border: 1px solid #777; border-radius: 12px; background: #202020; color: #fff; }
+dialog::backdrop { background: #000b; }
+dialog h2 { font-size: 26px; margin-bottom: 18px; }
+dialog p { line-height: 1.65; }
+dialog label { display: block; margin-top: 16px; }
+dialog input { display: block; width: 100%; padding: 10px; background: #343434; border: 1px solid #888; border-radius: 5px; color: #fff; }
+dialog .button { margin-top: 20px; }
+.dialog-close { position: absolute; top: 8px; right: 12px; border: 0; background: none; font-size: 26px; }
+
+/* # 10. RESPONSIVE: GIẢM CỘT VÀ THU GỌN MENU KHI MÀN HÌNH NHỎ: tìm số phần này theo hướng dẫn phân công. */
+/* 10. RESPONSIVE: GIẢM CỘT VÀ THU GỌN MENU KHI MÀN HÌNH NHỎ */
+/* # Chỉ áp dụng CSS trong khối này khi chiều rộng màn hình thỏa điều kiện ghi trong ngoặc. */
+@media (min-width: 1600px) {
+  .hero-content { margin: auto; width: 1440px; padding-left: 26px; }
+  /* # Chia trang review thành cột tải poster và cột biểu mẫu. */
+  .write-layout { max-width: 1600px; margin: auto; }
+}
+/* # Chỉ áp dụng CSS trong khối này khi chiều rộng màn hình thỏa điều kiện ghi trong ngoặc. */
+@media (max-width: 1250px) {
+  /* # Khung căn giữa, giới hạn chiều rộng và chừa lề hai bên trang. */
+  .container { width: calc(100% - 80px); }
+  /* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+  .site-header { padding: 0 40px; }
+  .header-actions { margin-left: 45px; }
+  h2 { font-size: 38px; }
+  /* # Chia Trang chủ thành cột anime mới và cột bảng xếp hạng bằng CSS Grid. */
+  .recent-layout { gap: 35px; grid-template-columns: minmax(0, 1fr) 250px; }
+  .recent-card { gap: 12px; padding: 12px; }
+  .recent-card > img { width: 110px; height: 180px; }
+  .recent-card h3 { display: block; font-size: 14px; }
+  .recent-card h3 span { display: block; }
+  .recent-card .description { -webkit-line-clamp: 8; font-size: 11px; }
+  .catalog-hero h1 { font-size: 48px; }
+  .catalog-description { font-size: 20px; }
+  .catalog-stats strong { font-size: 38px; }
+  /* # Chia vùng đầu trang chi tiết thành cột ảnh poster và cột thông tin. */
+  .detail-top { grid-template-columns: 280px minmax(0, 1fr); gap: 30px; }
+  .detail-poster { width: 280px; height: 415px; }
+  .detail-info h1 { font-size: 36px; }
+  #ten-khac { font-size: 18px; }
+  .detail-info dl { font-size: 16px; }
+  .detail-stats { font-size: 15px; }
+  .tags span { font-size: 13px; }
+  .write-page { padding-left: 28px; padding-right: 28px; }
+  /* # Chia trang review thành cột tải poster và cột biểu mẫu. */
+  .write-layout { grid-template-columns: 250px minmax(0, 1fr); }
+  .poster-preview { height: 340px; }
+  /* # Chia trang tài khoản thành cột hồ sơ và cột lịch sử review. */
+  .account-layout { grid-template-columns: 280px minmax(0, 1fr); gap: 35px; }
+  /* # Lưới poster của danh mục và danh sách đã lưu; số cột thay đổi trong media query. */
+  .poster-grid, .poster-row { gap: 20px; }
+}
+/* # Chỉ áp dụng CSS trong khối này khi chiều rộng màn hình thỏa điều kiện ghi trong ngoặc. */
+@media (max-width: 900px) {
+  /* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+  .site-header nav { gap: 20px; }
+  /* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+  .site-header nav a { font-size: 14px; }
+  .header-actions { gap: 15px; margin-left: 25px; }
+  .brand { font-size: 26px; }
+  .hero-content { padding-left: 50px; }
+  .hero h1 { font-size: 44px; }
+  /* # Chia Trang chủ thành cột anime mới và cột bảng xếp hạng bằng CSS Grid. */
+  .recent-layout { grid-template-columns: 1fr; }
+  .recent-main h2 { white-space: normal; }
+  .recent-card > img { width: 130px; height: 190px; }
+  .recent-card .description { -webkit-line-clamp: 8; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking { display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 30px; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking h2, .ranking-tabs { grid-column: 1 / -1; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking-tabs { justify-content: flex-start; gap: 18px; width: max-content; }
+  .rated-section { margin-bottom: 80px; }
+  .poster-row { overflow-x: auto; display: flex; padding-bottom: 12px; }
+  .poster-row .poster-card { flex: 0 0 175px; height: 250px; }
+  /* # Lưới poster của danh mục và danh sách đã lưu; số cột thay đổi trong media query. */
+  .poster-grid { grid-template-columns: repeat(4, 1fr); }
+  /* # Lưới poster của danh mục và danh sách đã lưu; số cột thay đổi trong media query. */
+  .poster-grid .poster-card { height: 240px; }
+  .catalog-hero { min-height: 830px; }
+  /* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+  .filter-fields { grid-template-columns: repeat(3, 1fr); }
+  /* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+  .filter-fields .button { grid-column: 1 / -1; }
+  .catalog-stats { gap: 20px; margin-top: 55px; }
+  .catalog-stats span { font-size: 12px; }
+  .catalog-stats strong { font-size: 30px; }
+  .detail-container { width: calc(100% - 50px); }
+  .detail-card, .comments-card { padding-left: 25px; padding-right: 25px; }
+  /* # Chia vùng đầu trang chi tiết thành cột ảnh poster và cột thông tin. */
+  .detail-top { grid-template-columns: 210px minmax(0, 1fr); gap: 24px; }
+  .detail-poster { width: 210px; height: 320px; }
+  .detail-info h1 { font-size: 28px; }
+  .detail-info dl { font-size: 14px; }
+  .detail-info { padding-top: 0; }
+  .detail-stats { gap: 18px; }
+  .related-section h2 { font-size: 32px; }
+  /* # Ảnh nền và vị trí khung đăng nhập/đăng ký. */
+  .auth-page { padding-right: 9%; }
+  /* # Chia trang review thành cột tải poster và cột biểu mẫu. */
+  .write-layout { grid-template-columns: 200px minmax(0, 1fr); gap: 15px; }
+  .review-fields { grid-template-columns: repeat(2, 1fr); }
+  .poster-preview { height: 270px; }
+  .upload-panel { padding: 12px; }
+  .review-form { padding: 18px; }
+  .account-page { padding-left: 28px; padding-right: 28px; }
+  /* # Chia trang tài khoản thành cột hồ sơ và cột lịch sử review. */
+  .account-layout { grid-template-columns: 220px minmax(0, 1fr); gap: 25px; }
+  .profile-review { flex-direction: column; }
+  .profile-review img { width: 80px; height: 110px; }
+  .footer-columns { gap: 30px; grid-template-columns: 1fr 1fr; }
+}
+/* # Chỉ áp dụng CSS trong khối này khi chiều rộng màn hình thỏa điều kiện ghi trong ngoặc. */
+@media (max-width: 640px) {
+  /* # Khung căn giữa, giới hạn chiều rộng và chừa lề hai bên trang. */
+  .container { width: calc(100% - 36px); }
+  h1 { font-size: 32px; }
+  h2 { font-size: 29px; }
+  /* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+  .site-header { top: 0; height: 76px; padding: 0 18px; }
+  .header-actions { margin-left: auto; gap: 16px; }
+  /* # Định dạng thanh đầu trang; Flexbox xếp logo, menu và các nút trên một hàng. */
+  .site-header nav { display: none; position: absolute; top: 70px; left: 18px; right: 18px; background: #161616; border: 1px solid #555; padding: 20px; border-radius: 8px; box-shadow: 0 15px 30px #0008; }
+  /* # Lớp open do JavaScript thêm vào để hiện menu trên điện thoại. */
+  .site-header nav.open { display: flex; flex-direction: column; gap: 20px; }
+  .mobile-menu { display: inline-flex; font-size: 25px; }
+  .brand { font-size: 24px; }
+  .search-panel { right: 18px; left: 18px; width: auto; top: 76px; padding: 16px; }
+  /* # Đặt kích thước và ảnh nền của banner đầu Trang chủ. */
+  .hero { height: 620px; background-position: 62% top; background-size: auto 620px; }
+  .hero-content { padding: 136px 22px 0; width: 100%; }
+  .hero h1 { font-size: 32px; margin-bottom: 20px; }
+  #hero-meta { font-size: 11px; max-width: 330px; }
+  #hero-description { width: 100%; max-width: 360px; font-size: 13px; line-height: 1.5; min-height: 120px; }
+  .hero-buttons { gap: 12px; margin-top: 22px; }
+  .hero-buttons .button { font-size: 12px; min-width: 0; padding: 10px 14px; height: 46px; }
+  .hero-arrows { margin-top: 24px; }
+  .featured-viewport { margin-top: 22px; }
+  /* # Hàng ảnh chạy liên tục: animation 45s là 45 giây mỗi vòng; tăng số này để chạy chậm hơn. */
+  .featured-track { --vi-tri-dau: 18px; }
+  /* # Kích thước một poster trong hàng chuyển động; margin-right tạo khoảng cách giữa hai poster. */
+  .featured-track .poster-card { width: 170px; height: 225px; margin-right: 18px; }
+  .featured-track .poster-caption { font-size: 12px; }
+  /* # Chia Trang chủ thành cột anime mới và cột bảng xếp hạng bằng CSS Grid. */
+  .recent-layout { margin-top: 38px; gap: 30px; }
+  .section-subtitle { padding: 15px 0; gap: 15px; margin-bottom: 20px; }
+  .section-subtitle p, .section-subtitle a, .section-subtitle > span { font-size: 11px; }
+  /* # Xếp các anime mới thành lưới; repeat(2, ...) nghĩa là hai cột bằng nhau. */
+  .recent-grid { grid-template-columns: 1fr; gap: 18px; }
+  .recent-card { padding: 13px; gap: 18px; min-height: 190px; }
+  .recent-card > img { width: 115px; height: 165px; }
+  .recent-card h3 { display: flex; font-size: 14px; }
+  .recent-card .description { font-size: 11px; -webkit-line-clamp: 7; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking { display: block; padding: 20px; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking-tabs { display: flex; width: 100%; justify-content: space-between; gap: 8px; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking-item h3 { font-size: 15px; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking-item p { font-size: 11px; }
+  /* # Định dạng bảng xếp hạng minh họa; phần này dùng nội dung HTML tĩnh. */
+  .ranking-item { gap: 18px; }
+  .rated-section { margin-top: 36px; margin-bottom: 60px; }
+  .poster-row { gap: 16px; }
+  .poster-row .poster-card { flex-basis: 145px; height: 212px; }
+  /* # Đặt tên và điểm sát đáy poster; gradient đen làm chữ dễ đọc. */
+  .poster-caption { font-size: 11px; padding: 30px 7px 9px; }
+  .catalog-hero { padding: 115px 0 60px; min-height: 0; }
+  .catalog-hero h1 { font-size: 32px; padding: 0 20px; }
+  .catalog-description { font-size: 15px; margin-top: 30px; }
+  .filter-box h2 { font-size: 24px; }
+  /* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+  .filter-fields { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  /* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+  .filter-fields select { height: 40px; }
+  /* # Dùng Grid chia các ô lọc và nút Lọc Anime thành các cột. */
+  .filter-fields .button { min-height: 42px; }
+  .catalog-stats { grid-template-columns: 1fr; gap: 15px; margin-top: 36px; }
+  .catalog-stats div { padding: 20px 10px; }
+  .catalog-stats strong { font-size: 36px; margin-bottom: 8px; }
+  .catalog-stats span { font-size: 13px; }
+  .results-heading { display: block; }
+  .results-heading h2 { font-size: 26px; margin-bottom: 15px; }
+  /* # Lưới poster của danh mục và danh sách đã lưu; số cột thay đổi trong media query. */
+  .poster-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 16px; }
+  /* # Lưới poster của danh mục và danh sách đã lưu; số cột thay đổi trong media query. */
+  .poster-grid .poster-card { height: 235px; }
+  .detail-page { padding-top: 95px; }
+  .detail-container { width: calc(100% - 30px); }
+  .detail-card { padding: 18px 14px; border-radius: 12px; }
+  /* # Chia vùng đầu trang chi tiết thành cột ảnh poster và cột thông tin. */
+  .detail-top { grid-template-columns: 108px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .detail-poster { width: 108px; height: 165px; }
+  .detail-info h1 { font-size: 22px; }
+  #ten-khac { font-size: 12px; min-height: 0; }
+  .detail-stats { gap: 12px; font-size: 11px; flex-wrap: wrap; margin-top: 12px; }
+  .detail-info h2 { font-size: 18px; margin-top: 15px; margin-bottom: 10px; }
+  .detail-info dl { font-size: 12px; line-height: 1.6; }
+  .detail-bottom { margin-top: 14px; gap: 9px; }
+  .tags { gap: 6px; }
+  .tags span { font-size: 10px; padding: 3px 7px; }
+  .save-button { font-size: 12px; }
+  .story { margin-top: 25px; }
+  .story h2, .comments-card h2 { font-size: 21px; }
+  .story p { font-size: 15px; }
+  .comments-card { padding: 12px 16px 22px; margin-top: 20px; border-radius: 12px; }
+  .comment { font-size: 14px; }
+  #yeu-cau-dang-nhap { font-size: 12px; left: 15px; right: 12px; }
+  .comment-form textarea { padding: 28px 14px 36px; }
+  .related-section { padding: 45px 0; }
+  .related-section h2 { font-size: 26px; }
+  .related-section > p { font-size: 12px; }
+  .related-section .poster-row { padding-top: 25px; }
+  /* # Ảnh nền và vị trí khung đăng nhập/đăng ký. */
+  .auth-page { min-height: 100svh; padding: 105px 18px 45px; align-items: flex-start; justify-content: center; }
+  /* # Khung biểu mẫu đăng nhập/đăng ký: chiều rộng, khoảng đệm, viền và nền. */
+  .auth-card { width: 100%; max-width: 435px; min-height: 0; padding: 30px 22px; }
+  /* # Khung biểu mẫu đăng nhập/đăng ký: chiều rộng, khoảng đệm, viền và nền. */
+  .auth-card h1 { font-size: 32px; margin-bottom: 28px; }
+  .auth-options { font-size: 11px; }
+  .auth-field > label { font-size: 13px; }
+  /* # Xếp biểu tượng và ô nhập trên cùng hàng bằng Flexbox. */
+  .input-with-icon input { font-size: 14px; }
+  /* # Khung biểu mẫu đăng nhập/đăng ký: chiều rộng, khoảng đệm, viền và nền. */
+  .auth-card .button { font-size: 16px; }
+  .write-page { padding: 95px 18px 40px; }
+  /* # Chia trang review thành cột tải poster và cột biểu mẫu. */
+  .write-layout { grid-template-columns: 1fr; gap: 18px; }
+  .upload-panel { min-height: 0; padding: 15px; }
+  .poster-preview { height: 260px; }
+  .poster-preview img:not(.upload-placeholder) { object-fit: contain; }
+  .upload-panel .button { min-height: 44px; }
+  .review-form { min-height: 0; padding: 18px 15px; }
+  .review-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px 12px; }
+  .field input, .field textarea { font-size: 13px; min-height: 42px; }
+  .review-fields .field:nth-child(5), .review-fields .field:nth-child(7) { grid-column: 1 / -1; }
+  #review-body { min-height: 240px; }
+  .review-buttons { gap: 12px; padding-top: 30px; }
+  .review-buttons .button { min-width: 80px; min-height: 44px; }
+  .review-buttons .primary { min-width: 160px; }
+  .saved-page { padding-top: 110px; min-height: 700px; padding-bottom: 60px; }
+  .saved-page h1 { font-size: 32px; }
+  .saved-toolbar { margin-top: 30px; flex-direction: column; }
+  .saved-toolbar input { max-width: none; }
+  .saved-grid { margin-top: 30px; }
+  .account-page { min-height: 800px; padding: 105px 18px 55px; }
+  /* # Chia trang tài khoản thành cột hồ sơ và cột lịch sử review. */
+  .account-layout { grid-template-columns: 1fr; gap: 35px; }
+  .avatar { width: 100px; height: 100px; }
+  .history-section { margin-top: 35px; }
+  .profile-reviews { margin-top: 0; padding: 16px; }
+  .profile-review { flex-direction: row; gap: 12px; }
+  .profile-review img { width: 70px; height: 105px; }
+  .profile-review h3 { font-size: 15px; }
+  .footer-columns { grid-template-columns: 1fr; gap: 20px; }
+  .footer-bottom { flex-direction: column; gap: 8px; }
+  /* # Nền, khoảng đệm và chữ của chân trang dùng chung. */
+  .site-footer { padding: 25px 22px 18px; }
+}
+/* # Thiết bị yêu cầu giảm chuyển động thì tắt animation/transition và ẩn poster bản sao. */
+@media (prefers-reduced-motion: reduce) {
+  .featured-track .ban-sao, #dung-noi-bat { display: none; }
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
